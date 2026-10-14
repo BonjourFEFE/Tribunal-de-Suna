@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Justice — Tribunal de Sunagakure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg1:#f7edda;--bg2:#e8d0a2;--glowc:rgba(232,185,79,.4);--glass:rgba(255,252,245,.74);--gb:rgba(150,100,30,.28);--text:#2a1f14;--muted:#7a6a55;--gold:#a8691c;--gold2:#7e4a10;--onGold:#fff8ea;--field:rgba(255,255,255,.75);--ok:#1e8449;--err:#b03a2e;--dune1:#e2c48c;--dune2:#d3a865;--star:0;--shadow:0 22px 44px -24px rgba(90,60,20,.5);
+--display:'Cinzel','Trajan Pro',Georgia,serif;--body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#0b0a10;--bg2:#1c1322;--glowc:rgba(232,185,79,.22);--glass:rgba(255,255,255,.05);--gb:rgba(232,185,79,.22);--text:#f3ebdd;--muted:#a79d8e;--gold:#e8b94f;--gold2:#b9792a;--onGold:#1b1208;--field:rgba(0,0,0,.3);--ok:#6fdc9a;--err:#ff7b6b;--dune1:#2b1d15;--dune2:#3b2719;--star:.9;--shadow:0 24px 60px -24px rgba(0,0,0,.8)}}
+:root[data-theme="dark"]{--bg1:#0b0a10;--bg2:#1c1322;--glowc:rgba(232,185,79,.22);--glass:rgba(255,255,255,.05);--gb:rgba(232,185,79,.22);--text:#f3ebdd;--muted:#a79d8e;--gold:#e8b94f;--gold2:#b9792a;--onGold:#1b1208;--field:rgba(0,0,0,.3);--ok:#6fdc9a;--err:#ff7b6b;--dune1:#2b1d15;--dune2:#3b2719;--star:.9;--shadow:0 24px 60px -24px rgba(0,0,0,.8)}
+*{box-sizing:border-box}html,body{margin:0}
+[hidden]{display:none!important}
+body{font:15px/1.5 var(--body);color:var(--text);min-height:100vh;background:radial-gradient(900px 520px at 50% -8%,var(--glowc),transparent 70%),linear-gradient(180deg,var(--bg1),var(--bg2)) fixed}
+body::before{content:"";position:fixed;inset:0;z-index:-1;opacity:var(--star);pointer-events:none;background:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 28% 8%,#fff,transparent),radial-gradient(1.4px 1.4px at 46% 22%,#fff,transparent),radial-gradient(1px 1px at 63% 12%,#fff,transparent),radial-gradient(1.2px 1.2px at 81% 26%,#fff,transparent),radial-gradient(1px 1px at 92% 9%,#fff,transparent),radial-gradient(1px 1px at 6% 40%,#fff,transparent),radial-gradient(1px 1px at 72% 44%,#fff,transparent)}
+body::after{content:"";position:fixed;left:-10%;right:-10%;bottom:0;height:30vh;z-index:-1;pointer-events:none;background:radial-gradient(60% 100% at 18% 100%,var(--dune1) 98%,transparent 100%),radial-gradient(55% 85% at 82% 100%,var(--dune2) 98%,transparent 100%)}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.card{background:var(--glass);border:1px solid var(--gb);border-radius:20px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:up .5s ease both}
+
+#login{max-width:400px;margin:9vh auto 0;padding:38px 32px;text-align:center}
+.emb{width:88px;height:88px;margin:0 auto 16px;display:grid;place-items:center;border-radius:50%;color:var(--gold);border:1px solid var(--gb);background:radial-gradient(circle at 50% 35%,var(--glowc),transparent 72%);box-shadow:0 0 44px -6px var(--glowc)}
+.emb svg{width:46px;height:46px}
+h1{margin:0;font:700 34px/1.1 var(--display);letter-spacing:.22em;text-indent:.22em;background:linear-gradient(180deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0 28px;color:var(--muted);font:500 11px var(--display);letter-spacing:.3em;text-transform:uppercase}
+.sub::before,.sub::after{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}.sub::after{transform:scaleX(-1)}
+h2{margin:0 0 14px;display:flex;align-items:center;gap:12px;font:700 17px var(--display);letter-spacing:.14em;text-transform:uppercase}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gb),transparent)}
+
+label{display:block;margin:12px 0 6px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+input,select,textarea{width:100%;padding:11px 13px;font:inherit;color:var(--text);background:var(--field);border:1px solid var(--gb);border-radius:11px;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--glowc)}
+select option{color:#1b1208;background:#fff}
+button{padding:11px 18px;font:600 14px var(--body);letter-spacing:.03em;border:0;border-radius:11px;color:var(--onGold);background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;box-shadow:0 10px 22px -12px var(--gold2);transition:transform .15s,filter .15s,background .2s}
+button:hover{transform:translateY(-1px);filter:brightness(1.1)}button:active{transform:none}
+button.g,button.d{padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);background:transparent;border:1px solid var(--gb);box-shadow:none}
+button.d{color:var(--err)}button.g:hover,button.d:hover{background:var(--glass)}
+#login button[type=submit]{width:100%;margin-top:20px;padding:13px}
+.err{min-height:18px;margin-top:10px;font-size:13px;color:var(--err)}
+.hint{margin:10px 0 0;color:var(--muted);font-size:13px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 22px;background:var(--glass);border-bottom:1px solid var(--gb);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:12px;color:var(--gold);font:700 17px var(--display);letter-spacing:.18em}
+.brand svg{width:30px;height:30px}
+.brand small{display:block;margin-top:2px;color:var(--muted);font:500 10px var(--body);letter-spacing:.26em;text-transform:uppercase}
+.who{display:flex;align-items:center;gap:14px}
+.who #me{display:flex;align-items:center;gap:10px;font-weight:600;line-height:1.2}
+.who #me small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.av{display:grid;place-items:center;flex:none;width:36px;height:36px;border-radius:50%;color:var(--onGold);font:700 15px var(--display);background:linear-gradient(135deg,var(--gold),var(--gold2))}
+nav{display:flex;gap:8px;max-width:940px;margin:0 auto;padding:18px 22px 6px;overflow-x:auto;scrollbar-width:none}
+nav button{flex:none;padding:9px 17px;font-weight:500;color:var(--muted);background:var(--glass);border:1px solid var(--gb);border-radius:99px;box-shadow:none}
+nav button.on{color:var(--onGold);background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;box-shadow:0 10px 24px -12px var(--gold2)}
+main{display:grid;gap:18px;max-width:940px;margin:0 auto;padding:12px 22px 90px}
+
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0 14px;align-items:end}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:9px;padding:13px 15px;background:var(--field);border:1px solid transparent;border-radius:14px;transition:border-color .2s}
+.item:hover{border-color:var(--gb)}
+.item small{display:block;margin-top:3px;font-size:13px;line-height:1.45;color:var(--muted)}
+.act{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.tag{display:inline-block;margin-left:8px;padding:2px 10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gb);border-radius:99px}
+.tag[data-v="Coupable"]{color:var(--err);border-color:var(--err)}
+.tag[data-v="Non coupable"],.tag[data-v="Relaxé"]{color:var(--ok);border-color:var(--ok)}
+.pos{color:var(--ok);font-weight:600}.neg{color:var(--err);font-weight:600}
+code{padding:1px 7px;font:13px ui-monospace,Menlo,monospace;color:var(--gold);background:var(--field);border-radius:6px}
+.empty{padding:14px;text-align:center;color:var(--muted)}
+
+.bal{margin-bottom:16px;padding:22px;text-align:center;border:1px solid var(--gb);border-radius:16px;background:radial-gradient(120% 150% at 50% 0,var(--glowc),transparent 70%),var(--field)}
+.bal .lbl{display:block;color:var(--muted);font:500 11px var(--display);letter-spacing:.3em;text-transform:uppercase}
+.bal .amt{display:block;margin-top:6px;color:var(--gold);font:700 38px var(--display);letter-spacing:.04em}
+.bal .amt.neg{color:var(--err)}
+.hero{display:flex;align-items:center;gap:18px;margin-bottom:16px}
+.hero .av{width:76px;height:76px;font-size:30px;box-shadow:0 0 38px -6px var(--glowc)}
+.hero b{display:block;font:700 22px var(--display);letter-spacing:.06em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{padding:16px;background:var(--field);border:1px solid var(--gb);border-radius:14px}
+.stat span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stat b{display:block;margin-top:6px;color:var(--gold);font:700 20px var(--display)}
+@media (max-width:560px){.hero{flex-direction:column;text-align:center}.brand small{display:none}header{padding:10px 16px}main,nav{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<div id="login" class="card">
+  <div class="emb"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8v44M20 54h24M12 18h40M12 18 5 34a7 7 0 0 0 14 0zM52 18l-7 16a7 7 0 0 0 14 0z"/><circle cx="32" cy="8" r="2.2" fill="currentColor"/></svg></div>
+  <h1>Justice</h1><p class="sub">Tribunal de Sunagakure</p>
+  <form id="lf" autocomplete="off">
+    <label for="key">Mot de passe</label>
+    <input id="key" type="password" required autofocus>
+    <button type="submit">Se connecter</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+  <button type="button" class="g" id="reset" hidden style="width:100%;margin-top:14px">Mot de passe gérant oublié ? Revenir au mot de passe de base (propriétaire)</button>
+</div>
+
+<div id="app" hidden>
+  <header><div class="brand"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8v44M20 54h24M12 18h40M12 18 5 34a7 7 0 0 0 14 0zM52 18l-7 16a7 7 0 0 0 14 0z"/><circle cx="32" cy="8" r="2.2" fill="currentColor"/></svg><div>JUSTICE<small>Tribunal de Sunagakure</small></div></div>
+    <div class="who"><span id="me"></span><button class="g" data-act="logout">Déconnexion</button></div></header>
+  <nav id="tabs"></nav>
+  <main>
+    <section id="t-profil" class="card">
+      <h2>🪪 Mon profil</h2><div id="pf"></div>
+      <form id="fw" class="row" hidden><div><label>Nouveau mot de passe</label><input id="w1" type="password" minlength="6" required></div><div><label>Confirmer</label><input id="w2" type="password" minlength="6" required></div><div><button type="submit">Changer mon mot de passe</button></div></form><div class="err" id="werr"></div>
+      <form id="fp" class="row" hidden><div><label>Prénom</label><input name="prenom" required></div><div><label>Nom</label><input name="nom" required></div><div><button type="submit">Compléter mon profil</button></div></form>
+    </section>
+
+    <section id="t-membres" class="card">
+      <h2>👥 Membres</h2>
+      <form id="fm" class="row">
+        <div><label>Prénom</label><input name="prenom" required></div>
+        <div><label>Nom</label><input name="name" required></div>
+        <div><label>Grade</label><select name="grade" id="gsel"></select></div>
+        <div><button type="submit">Ajouter + créer la clé</button></div>
+      </form>
+      <div id="lm" style="margin-top:12px"></div>
+    </section>
+
+    <section id="t-tresor" class="card">
+      <h2>💰 Trésorerie</h2>
+      <div class="bal" id="bal"></div>
+      <form id="ft" class="row">
+        <div><label>Type</label><select name="type" id="ttype"></select></div>
+        <div><label>Montant (Ryō)</label><input name="amount" type="number" min="1" step="1" required></div>
+        <div><label>Motif (facultatif)</label><input name="note"></div>
+        <div><button type="submit">Enregistrer</button></div>
+      </form>
+      <p class="hint" id="thint"></p><div class="err" id="terr"></div>
+      <div id="lt" style="margin-top:12px"></div>
+    </section>
+
+    <section id="t-juge" class="card">
+      <h2>⚖️ Jugements</h2>
+      <form id="fj">
+        <div class="row">
+          <div><label>Intitulé de l'affaire</label><input name="title" required></div>
+          <div><label>Date</label><input name="date" type="date" required></div>
+          <div><label>Accusé</label><input name="accused" required></div>
+          <div><label>Avocat de la défense</label><input name="lawyer"></div>
+          <div><label>Juge</label><input name="judge" required></div>
+          <div><label>Procureur</label><input name="prosecutor"></div>
+          <div><label>Verdict</label><select name="verdict"><option>En cours</option><option>Coupable</option><option>Non coupable</option><option>Relaxé</option><option>Renvoyé</option></select></div>
+        </div>
+        <label>Chefs d'accusation</label><input name="charges">
+        <label>Notes / peine / détails</label><textarea name="notes" rows="3"></textarea>
+        <p><button type="submit">Créer le jugement</button></p>
+      </form>
+      <div id="lj"></div>
+    </section>
+
+    <section id="t-taches" class="card">
+      <h2>📜 Tâches</h2>
+      <form id="fk" class="row">
+        <div><label>Type de tâche</label><select name="type">
+          <option>Jugement</option><option>Défense d'un client</option><option>Procuration</option><option>Demande d'adoption</option><option>Changement de nom</option></select></div>
+        <div><label>Détails (client, affaire…)</label><input name="details" required></div>
+        <div><button type="submit">Ajouter</button></div>
+      </form>
+      <div id="lk" style="margin-top:12px"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const GR=['Gérant','Co-gérant','Magistrat','Greffier','Procureur','Avocat','Auditeur'];
+const S={members:[],treasury:[],judgments:[],tasks:[],me:null,db:null,open:{},ready:false,reset:false,local:false,tab:'t-profil',owner:false,setup:false};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt=n=>Number(n).toLocaleString('fr-FR')+' Ryō';
+const fdate=t=>new Date(t).toLocaleDateString('fr-FR');
+function genKey(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';crypto.getRandomValues(new Uint8Array(12)).forEach((v,i)=>{s+=a[v%a.length];if(i%4==3&&i<11)s+='-'});return s}
+const isG=()=>S.me&&S.me.grade==='Gérant';
+const canManage=()=>S.me&&(S.me.grade==='Gérant'||S.me.grade==='Co-gérant');
+const ini=m=>((m&&(m.prenom||m.nom||m.name))||'?').charAt(0).toUpperCase();
+const fullName=m=>m?[m.prenom,m.nom||m.name].filter(Boolean).join(' '):'';
+const netOf=x=>x.net!=null?x.net:x.amount;
+const balance=()=>S.treasury.reduce((s,x)=>s+(x.type==='depot'?netOf(x):-x.amount),0);
+const payOf=id=>S.treasury.reduce((s,x)=>s+(x.type==='depot'&&x.memberId===id?(x.commission||0):0),0);
+const tasksOf=m=>S.tasks.filter(x=>x.memberId===m.id||(!x.memberId&&x.by===fullName(m))).sort((a,b)=>b.date-a.date);
+const editable=m=>m.id!=='gerant'&&(isG()||(m.grade!=='Co-gérant'&&m.grade!=='Gérant'));
+const assignable=()=>isG()?GR.slice(1):GR.slice(2);
+const canJudge=()=>S.me&&S.me.grade!=='Auditeur';
+function tabsFor(){const t=[['t-profil','🪪 Profil'],['t-tresor','💰 Trésorerie'],['t-juge','⚖️ Jugements'],['t-taches','📜 Tâches']];
+  if(canManage())t.push(['t-membres','👥 Membres']);return t}
+async function sha(p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('tsr-justice:'+p));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return ''}}
+const BASE_HASH='6cffa4597e2cc166c61f01553c68ec76252a06d280178e56d2963881acf7c509'; /* empreinte du mot de passe de base du gérant */
+function save(id){try{sessionStorage.setItem('jid',id||'')}catch(e){}}
+function restore(){if(S.me)return;try{const id=sessionStorage.getItem('jid');if(id)S.me=S.members.find(m=>m.id===id)||null}catch(e){}}
+
+function render(){
+  const logged=!!S.me;
+  if(logged){S.me=S.members.find(m=>m.id===S.me.id)||null}
+  $('login').hidden=!!S.me;$('app').hidden=!S.me;
+  if(!S.me){
+    const g=S.members.find(m=>m.id==='gerant');
+    $('reset').hidden=!(S.owner&&!S.local&&g&&g.hash);
+    return}
+  $('me').innerHTML='<span class="av">'+esc(ini(S.me))+'</span><span>'+esc(fullName(S.me))+'<small>'+esc(S.me.grade)+'</small></span>';
+  const tabs=tabsFor();if(!tabs.find(t=>t[0]===S.tab))S.tab=tabs[0][0];
+  $('tabs').innerHTML=tabs.map(t=>'<button data-act="tab" data-v="'+t[0]+'" class="'+(t[0]===S.tab?'on':'')+'">'+t[1]+'</button>').join('');
+  ['t-profil','t-membres','t-tresor','t-juge','t-taches'].forEach(id=>$(id).hidden=id!==S.tab);
+  $('fj').hidden=!canJudge();
+
+  const gopt=assignable().map(g=>'<option>'+g+'</option>').join('');
+  if($('gsel').dataset.o!==gopt){$('gsel').innerHTML=gopt;$('gsel').dataset.o=gopt}
+  const topt=canManage()?'<option value="depot">Dépôt</option><option value="retrait">Retrait</option>':'<option value="depot">Dépôt</option>';
+  if($('ttype').dataset.o!==topt){$('ttype').innerHTML=topt;$('ttype').dataset.o=topt}
+  const pay=S.treasury.reduce((s,x)=>s+(x.type==='depot'&&x.memberId===S.me.id?(x.commission||0):0),0);
+  const st=[['Prénom',S.me.prenom||'—'],['Nom',S.me.nom||S.me.name||'—'],['Paye actuelle',fmt(pay)],['Tâches',tasksOf(S.me).length]];
+  $('pf').innerHTML='<div class="hero"><span class="av">'+esc(ini(S.me))+'</span><div><b>'+esc(fullName(S.me)||'—')+'</b><span class="tag" style="margin:6px 0 0">'+esc(S.me.grade)+'</span></div></div><div class="stats">'+st.map(r=>'<div class="stat"><span>'+r[0]+'</span><b>'+esc(r[1])+'</b></div>').join('')+'</div>';
+  $('fw').hidden=!isG();
+  $('fp').hidden=!(isG()||!S.me.prenom);
+  $('fp').querySelector('button').textContent=S.me.prenom?'Modifier mon nom':'Compléter mon profil';
+  if(!$('fp').contains(document.activeElement)){$('fp').prenom.value=S.me.prenom||'';$('fp').nom.value=S.me.nom||''}
+
+  $('lm').innerHTML=S.members.slice().sort((a,b)=>GR.indexOf(a.grade)-GR.indexOf(b.grade)).map(m=>{const ed=editable(m),sk=(ed||m.id===S.me.id)&&m.id!=='gerant',p=payOf(m.id),tk=tasksOf(m);
+    return '<div class="item"><div><b>'+esc(fullName(m))+'</b><span class="tag">'+esc(m.grade)+'</span><small>'+(sk?'Clé : <code>'+esc(m.key)+'</code>':(m.id==='gerant'?'Mot de passe masqué':'Clé masquée'))+'</small><small>Paye : <b>'+fmt(p)+'</b> · '+tk.length+' tâche'+(tk.length>1?'s':'')+'</small>'+
+    (S.open[m.id]?(tk.length?tk.map(x=>'<small>• '+esc(x.type)+' — '+esc(x.details)+' ('+fdate(x.date)+')</small>').join(''):'<small>Aucune tâche.</small>'):'')+
+    '</div><div class="act"><button class="g" data-act="tasks" data-id="'+m.id+'">'+(S.open[m.id]?'Masquer':'Voir')+' les tâches</button>'+
+    (ed?'<select data-grade="'+m.id+'" style="width:auto">'+GR.slice(1).filter(g=>assignable().includes(g)||g===m.grade).map(g=>'<option'+(g===m.grade?' selected':'')+'>'+g+'</option>').join('')+'</select><button class="d" data-act="del" data-c="members" data-id="'+m.id+'">Supprimer</button>':'')+
+    (sk?'<button class="g" data-act="copy" data-v="'+esc(m.key)+'">Copier la clé</button>':'')+'</div></div>'}).join('')||'<p class="empty">Aucun membre.</p>';
+
+  const tr=S.treasury.slice().sort((a,b)=>b.date-a.date);const bal=balance();
+  $('bal').innerHTML='<span class="lbl">Solde du trésor</span><span class="amt'+(bal<0?' neg':'')+'">'+fmt(bal)+'</span>';
+  $('lt').innerHTML=tr.map(x=>'<div class="item"><div><b class="'+(x.type==='depot'?'pos':'neg')+'">'+(x.type==='depot'?'+':'−')+fmt(x.amount)+'</b><small>'+(x.note?esc(x.note)+' · ':'')+esc(x.by)+' · '+fdate(x.date)+(x.type==='depot'&&x.commission?' · dont '+fmt(x.commission)+' pour sa paye':'')+'</small></div>'+
+    (isG()?'<button class="d" data-act="del" data-c="treasury" data-id="'+x.id+'">Supprimer</button>':'')+'</div>').join('')||'<p class="empty">Aucune opération.</p>';
+
+  $('lj').innerHTML=S.judgments.slice().sort((a,b)=>(b.day||'').localeCompare(a.day||'')).map(j=>
+    '<div class="item"><div><b>'+esc(j.title)+'</b><span class="tag" data-v="'+esc(j.verdict)+'">'+esc(j.verdict)+'</span><small>'+esc(j.day)+' · Accusé : '+esc(j.accused)+' · Juge : '+esc(j.judge)+
+    (j.prosecutor?' · Procureur : '+esc(j.prosecutor):'')+(j.lawyer?' · Avocat : '+esc(j.lawyer):'')+'</small>'+
+    (j.charges?'<small>Chefs d\'accusation : '+esc(j.charges)+'</small>':'')+(j.notes?'<small>'+esc(j.notes)+'</small>':'')+'<small>Saisi par '+esc(j.by)+'</small></div>'+
+    (isG()?'<button class="d" data-act="del" data-c="judgments" data-id="'+j.id+'">Supprimer</button>':'')+'</div>').join('')||'<p class="empty">Aucun jugement.</p>';
+
+  $('lk').innerHTML=S.tasks.slice().sort((a,b)=>b.date-a.date).map(k=>
+    '<div class="item"><div><b>'+esc(k.type)+'</b><small>'+esc(k.details)+' · '+esc(k.by)+' ('+esc(k.grade)+') · '+fdate(k.date)+'</small></div>'+
+    (isG()?'<button class="d" data-act="del" data-c="tasks" data-id="'+k.id+'">Supprimer</button>':'')+'</div>').join('')||'<p class="empty">Aucune tâche.</p>';
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='tab'){S.tab=b.dataset.v;render()}
+  else if(a==='tasks'){S.open[b.dataset.id]=!S.open[b.dataset.id];render()}
+  else if(a==='logout'){S.me=null;save('');render()}
+  else if(a==='copy'){try{navigator.clipboard.writeText(b.dataset.v);b.textContent='Copié'}catch(x){b.textContent=b.dataset.v}}
+  else if(a==='del'){
+    const c=b.dataset.c,tm=S.members.find(m=>m.id===b.dataset.id);
+    if(!(c==='members'?(canManage()&&tm&&editable(tm)):isG()))return;
+    if(!b.dataset.armed){b.dataset.armed=1;b.textContent='Confirmer ?';return}
+    S.db.collection(b.dataset.c).doc(b.dataset.id).delete()}
+});
+document.addEventListener('change',e=>{
+  const s=e.target.closest('[data-grade]');
+  const tm=s&&S.members.find(m=>m.id===s.dataset.grade);
+  if(tm&&canManage()&&editable(tm))S.db.collection('members').doc(tm.id).update({grade:s.value});
+});
+$('lf').addEventListener('submit',async e=>{
+  e.preventDefault();const raw=$('key').value.trim(),er=$('err');er.style.color='';
+  let m=S.members.find(x=>x.id!=='gerant'&&x.key&&(x.key===raw||x.key===raw.toUpperCase()));
+  if(!m){
+    const h=await sha(raw);
+    if(!h){er.textContent='Connexion sécurisée indisponible : ouvre la page en https ou en localhost.';return}
+    let g=S.members.find(x=>x.id==='gerant');
+    if(h===((g&&g.hash)||BASE_HASH)){
+      if(!g){g={id:'gerant',name:'Gérant',grade:'Gérant',hash:'',key:'',created:Date.now()};
+        try{await S.db.collection('members').doc('gerant').set({name:g.name,grade:g.grade,hash:'',key:'',created:g.created})}catch(x){}}
+      else if(g.key){try{await S.db.collection('members').doc('gerant').update({key:''})}catch(x){}}
+      m=g}}
+  if(m){S.me=m;save(m.id);$('key').value='';er.textContent='';render()}else er.textContent='Mot de passe incorrect.';
+});
+$('reset').addEventListener('click',async()=>{if(!S.owner)return;
+  try{await S.db.collection('members').doc('gerant').update({hash:''});$('err').style.color='var(--ok)';$('err').textContent='Mot de passe de base rétabli.'}catch(e){}});
+async function setGerantPwd(a,b,errEl){
+  if(a.length<6){errEl.style.color='var(--err)';errEl.textContent='6 caractères minimum.';return false}
+  if(a!==b){errEl.style.color='var(--err)';errEl.textContent='Les deux mots de passe sont différents.';return false}
+  const h=await sha(a);
+  if(!h){errEl.style.color='var(--err)';errEl.textContent='Impossible de protéger le mot de passe ici (ouvre la page en https ou en localhost).';return false}
+  const g=S.members.find(m=>m.id==='gerant'),ref=S.db.collection('members').doc('gerant');
+  if(g)await ref.update({hash:h,key:''});else await ref.set({name:'Gérant',grade:'Gérant',hash:h,key:'',created:Date.now()});
+  errEl.textContent='';return true}
+$('fw').addEventListener('submit',async e=>{e.preventDefault();if(!isG())return;
+  if(await setGerantPwd($('w1').value.trim(),$('w2').value.trim(),$('werr'))){$('w1').value=$('w2').value='';$('werr').style.color='var(--ok)';$('werr').textContent='Mot de passe modifié.'}});
+const fd=f=>Object.fromEntries(new FormData(f).entries());
+$('fm').addEventListener('submit',e=>{e.preventDefault();if(!canManage())return;const d=fd(e.target);
+  if(!assignable().includes(d.grade))return;
+  S.db.collection('members').add({prenom:d.prenom.trim(),nom:d.name.trim(),grade:d.grade,key:genKey(),created:Date.now()});e.target.reset()});
+$('fp').addEventListener('submit',e=>{e.preventDefault();if(S.me.prenom&&!isG())return;const d=fd(e.target);
+  S.db.collection('members').doc(S.me.id).update({prenom:d.prenom.trim(),nom:d.nom.trim()})});
+function hint(){const d=fd($('ft'));const a=Math.floor(Math.abs(Number(d.amount)))||0,c=Math.floor(a/10);
+  $('thint').textContent=d.type==='depot'&&a?'Sur ces '+fmt(a)+', '+fmt(c)+' (10 %) vont à ta paye et '+fmt(a-c)+' à la trésorerie.':''}
+$('ft').addEventListener('input',hint);$('ft').addEventListener('change',hint);
+$('ft').addEventListener('submit',e=>{e.preventDefault();const d=fd(e.target);const amt=Math.floor(Math.abs(Number(d.amount)));$('terr').textContent='';
+  if(!amt)return;const base={by:fullName(S.me),memberId:S.me.id,note:(d.note||'').trim(),date:Date.now()};
+  if(d.type==='retrait'){if(!canManage())return;if(amt>balance()){$('terr').textContent='Solde insuffisant.';return}
+    S.db.collection('treasury').add(Object.assign(base,{type:'retrait',amount:amt}))}
+  else{const c=Math.floor(amt/10);S.db.collection('treasury').add(Object.assign(base,{type:'depot',amount:amt,commission:c,net:amt-c}))}
+  e.target.reset();hint()});
+$('fj').addEventListener('submit',e=>{e.preventDefault();if(!canJudge())return;const d=fd(e.target);
+  S.db.collection('judgments').add({title:d.title.trim(),day:d.date,accused:d.accused.trim(),lawyer:d.lawyer.trim(),judge:d.judge.trim(),prosecutor:d.prosecutor.trim(),verdict:d.verdict,charges:d.charges.trim(),notes:d.notes.trim(),by:fullName(S.me)});e.target.reset()});
+$('fk').addEventListener('submit',e=>{e.preventDefault();const d=fd(e.target);
+  S.db.collection('tasks').add({type:d.type,details:d.details.trim(),by:fullName(S.me),memberId:S.me.id,grade:S.me.grade,date:Date.now()});e.target.reset()});
+
+/* Base de données locale (localStorage) utilisée quand la page est ouverte hors claude.ai */
+function localDb(){
+  const subs={},K=n=>'tsr_'+n;
+  const rd=n=>{try{return JSON.parse(localStorage.getItem(K(n))||'{}')}catch(e){return {}}};
+  const wr=(n,o)=>{try{localStorage.setItem(K(n),JSON.stringify(o))}catch(e){}};
+  const snap=n=>{const o=rd(n);return{docs:Object.keys(o).map(id=>({id,data:()=>o[id]})),metadata:{fromCache:false}}};
+  const emit=n=>(subs[n]||[]).forEach(f=>f(snap(n)));
+  return{collection:n=>({
+    onSnapshot(f){(subs[n]=subs[n]||[]).push(f);setTimeout(()=>f(snap(n)),0);return()=>{}},
+    async add(d){const o=rd(n);o[Math.random().toString(36).slice(2,12)]=d;wr(n,o);emit(n)},
+    doc:id=>({
+      async set(d){const o=rd(n);o[id]=d;wr(n,o);emit(n)},
+      async update(d){const o=rd(n);o[id]=Object.assign({},o[id],d);wr(n,o);emit(n)},
+      async delete(){const o=rd(n);delete o[id];wr(n,o);emit(n)}})})}
+}
+
+(async()=>{
+  let user=null,db=null;
+  if(window.claude){
+    try{user=await claude.use('user')}catch(e){}
+    db=await claude.use('db');
+    if(!db){$('err').textContent='Ouvre cette page depuis ton compte claude.ai pour accéder aux données.';return}
+    S.owner=user?user.isOwner():false;
+  }else{db=localDb();S.owner=true;S.local=true} /* hors claude.ai : stockage local du navigateur (test) */
+  S.db=db;
+  ['members','treasury','judgments','tasks'].forEach(n=>db.collection(n).onSnapshot(snap=>{
+    S[n]=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+    if(n==='members'){if(!snap.metadata.fromCache)S.ready=true;restore()}
+    render();
+  },er=>{$('err').textContent='Erreur de données : '+er.code}));
+})();
+</script>
+</body>
+</html>
