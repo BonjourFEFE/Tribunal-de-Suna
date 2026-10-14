@@ -91,6 +91,15 @@ code{padding:1px 7px;font:13px ui-monospace,Menlo,monospace;color:var(--gold);ba
     <button type="submit">Se connecter</button>
     <div class="err" id="err" role="alert"></div>
   </form>
+  <form id="seal" autocomplete="off" hidden>
+    <p class="empty" id="sealMsg"></p>
+    <div id="s1"><label for="sp">Prénom</label><input id="sp"><label for="sn">Nom</label><input id="sn"></div>
+    <div id="s2" hidden><label for="sw1">Choisis ton mot de passe</label><input id="sw1" type="password"><label for="sw2">Confirmer</label><input id="sw2" type="password"></div>
+    <button type="submit" id="sbtn">Vérifier mon nom</button>
+    <button type="button" class="g" id="sback" style="width:100%;margin-top:8px">Retour</button>
+    <div class="err" id="serr" role="alert"></div>
+  </form>
+  <button type="button" class="g" id="sealbtn" style="width:100%;margin-top:14px">Créer mon sceau</button>
   <button type="button" class="g" id="reset" hidden style="width:100%;margin-top:14px">Mot de passe gérant oublié ? Revenir au mot de passe de base (propriétaire)</button>
 </div>
 
@@ -111,8 +120,9 @@ code{padding:1px 7px;font:13px ui-monospace,Menlo,monospace;color:var(--gold);ba
         <div><label>Prénom</label><input name="prenom" required></div>
         <div><label>Nom</label><input name="name" required></div>
         <div><label>Grade</label><select name="grade" id="gsel"></select></div>
-        <div><button type="submit">Ajouter + créer la clé</button></div>
+        <div><button type="submit">Ajouter à la whitelist</button></div>
       </form>
+      <p class="hint">La personne choisit elle-même son mot de passe avec « Créer mon sceau » sur la page de connexion.</p><div class="err" id="merr"></div>
       <div id="lm" style="margin-top:12px"></div>
     </section>
 
@@ -172,6 +182,7 @@ const fdate=t=>new Date(t).toLocaleDateString('fr-FR');
 function genKey(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';crypto.getRandomValues(new Uint8Array(12)).forEach((v,i)=>{s+=a[v%a.length];if(i%4==3&&i<11)s+='-'});return s}
 const isG=()=>S.me&&S.me.grade==='Gérant';
 const canManage=()=>S.me&&(S.me.grade==='Gérant'||S.me.grade==='Co-gérant');
+const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
 const ini=m=>((m&&(m.prenom||m.nom||m.name))||'?').charAt(0).toUpperCase();
 const fullName=m=>m?[m.prenom,m.nom||m.name].filter(Boolean).join(' '):'';
 const netOf=x=>x.net!=null?x.net:x.amount;
@@ -215,11 +226,11 @@ function render(){
   if(!$('fp').contains(document.activeElement)){$('fp').prenom.value=S.me.prenom||'';$('fp').nom.value=S.me.nom||''}
 
   $('lm').innerHTML=S.members.slice().sort((a,b)=>GR.indexOf(a.grade)-GR.indexOf(b.grade)).map(m=>{const ed=editable(m),sk=(ed||m.id===S.me.id)&&m.id!=='gerant',p=payOf(m.id),tk=tasksOf(m);
-    return '<div class="item"><div><b>'+esc(fullName(m))+'</b><span class="tag">'+esc(m.grade)+'</span><small>'+(sk?'Clé : <code>'+esc(m.key)+'</code>':(m.id==='gerant'?'Mot de passe masqué':'Clé masquée'))+'</small><small>Paye : <b>'+fmt(p)+'</b> · '+tk.length+' tâche'+(tk.length>1?'s':'')+'</small>'+
+    return '<div class="item"><div><b>'+esc(fullName(m))+'</b><span class="tag">'+esc(m.grade)+'</span><small>'+(m.id==='gerant'?'Mot de passe masqué':m.hash?'Sceau créé ✓':m.key?(sk?'Clé : <code>'+esc(m.key)+'</code>':'Clé masquée'):'⏳ En attente de la création du sceau')+'</small><small>Paye : <b>'+fmt(p)+'</b> · '+tk.length+' tâche'+(tk.length>1?'s':'')+'</small>'+
     (S.open[m.id]?(tk.length?tk.map(x=>'<small>• '+esc(x.type)+' — '+esc(x.details)+' ('+fdate(x.date)+')</small>').join(''):'<small>Aucune tâche.</small>'):'')+
     '</div><div class="act"><button class="g" data-act="tasks" data-id="'+m.id+'">'+(S.open[m.id]?'Masquer':'Voir')+' les tâches</button>'+
     (ed?'<select data-grade="'+m.id+'" style="width:auto">'+GR.slice(1).filter(g=>assignable().includes(g)||g===m.grade).map(g=>'<option'+(g===m.grade?' selected':'')+'>'+g+'</option>').join('')+'</select><button class="d" data-act="del" data-c="members" data-id="'+m.id+'">Supprimer</button>':'')+
-    (sk?'<button class="g" data-act="copy" data-v="'+esc(m.key)+'">Copier la clé</button>':'')+'</div></div>'}).join('')||'<p class="empty">Aucun membre.</p>';
+    (ed&&(m.hash||m.key)?'<button class="g" data-act="reseal" data-id="'+m.id+'">Réinitialiser le sceau</button>':'')+(sk&&m.key&&!m.hash?'<button class="g" data-act="copy" data-v="'+esc(m.key)+'">Copier la clé</button>':'')+'</div></div>'}).join('')||'<p class="empty">Aucun membre.</p>';
 
   const tr=S.treasury.slice().sort((a,b)=>b.date-a.date);const bal=balance();
   $('bal').innerHTML='<span class="lbl">Solde du trésor</span><span class="amt'+(bal<0?' neg':'')+'">'+fmt(bal)+'</span>';
@@ -240,6 +251,9 @@ function render(){
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
   if(a==='tab'){S.tab=b.dataset.v;render()}
+  else if(a==='reseal'){const tm=S.members.find(m=>m.id===b.dataset.id);if(!(canManage()&&tm&&editable(tm)))return;
+    if(!b.dataset.armed){b.dataset.armed=1;b.textContent='Confirmer ?';return}
+    S.db.collection('members').doc(tm.id).update({hash:'',key:''})}
   else if(a==='tasks'){S.open[b.dataset.id]=!S.open[b.dataset.id];render()}
   else if(a==='logout'){S.me=null;save('');render()}
   else if(a==='copy'){try{navigator.clipboard.writeText(b.dataset.v);b.textContent='Copié'}catch(x){b.textContent=b.dataset.v}}
@@ -260,8 +274,9 @@ $('lf').addEventListener('submit',async e=>{
   if(!m){
     const h=await sha(raw);
     if(!h){er.textContent='Connexion sécurisée indisponible : ouvre la page en https ou en localhost.';return}
+    m=S.members.find(x=>x.id!=='gerant'&&x.hash&&x.hash===h);
     let g=S.members.find(x=>x.id==='gerant');
-    if(h===((g&&g.hash)||BASE_HASH)){
+    if(!m&&h===((g&&g.hash)||BASE_HASH)){
       if(!g){g={id:'gerant',name:'Gérant',grade:'Gérant',hash:'',key:'',created:Date.now()};
         try{await S.db.collection('members').doc('gerant').set({name:g.name,grade:g.grade,hash:'',key:'',created:g.created})}catch(x){}}
       else if(g.key){try{await S.db.collection('members').doc('gerant').update({key:''})}catch(x){}}
@@ -280,10 +295,31 @@ async function setGerantPwd(a,b,errEl){
   errEl.textContent='';return true}
 $('fw').addEventListener('submit',async e=>{e.preventDefault();if(!isG())return;
   if(await setGerantPwd($('w1').value.trim(),$('w2').value.trim(),$('werr'))){$('w1').value=$('w2').value='';$('werr').style.color='var(--ok)';$('werr').textContent='Mot de passe modifié.'}});
+function showSeal(on){S.sealId=null;$('seal').hidden=!on;$('lf').hidden=on;$('sealbtn').hidden=on;$('s1').hidden=false;$('s2').hidden=true;
+  $('sbtn').textContent='Vérifier mon nom';$('sealMsg').textContent='Entre ton prénom et ton nom, tels que le gérant les a enregistrés.';$('serr').textContent='';
+  ['sp','sn','sw1','sw2'].forEach(i=>$(i).value='')}
+$('sealbtn').addEventListener('click',()=>showSeal(true));
+$('sback').addEventListener('click',()=>showSeal(false));
+$('seal').addEventListener('submit',async e=>{e.preventDefault();const er=$('serr');er.style.color='';
+  if(!S.sealId){
+    const p=norm($('sp').value),n=norm($('sn').value);
+    const m=p&&n&&S.members.find(x=>x.id!=='gerant'&&!x.hash&&!x.key&&norm(x.prenom)===p&&norm(x.nom||x.name)===n);
+    if(!m){er.textContent='Nom introuvable, ou sceau déjà créé. Demande au gérant de t\'ajouter à la whitelist.';return}
+    S.sealId=m.id;$('s1').hidden=true;$('s2').hidden=false;$('sbtn').textContent='Créer mon sceau';
+    $('sealMsg').textContent='Nom validé, '+m.prenom+' ! Choisis ton mot de passe.';return}
+  const a=$('sw1').value.trim(),b=$('sw2').value.trim();
+  if(a.length<6){er.textContent='6 caractères minimum.';return}
+  if(a!==b){er.textContent='Les deux mots de passe sont différents.';return}
+  const h=await sha(a);if(!h){er.textContent='Connexion sécurisée indisponible : ouvre la page en https ou en localhost.';return}
+  const g=S.members.find(x=>x.id==='gerant');
+  if(h===((g&&g.hash)||BASE_HASH)||S.members.some(x=>x.hash===h)){er.textContent='Ce mot de passe n\'est pas disponible, choisis-en un autre.';return}
+  try{await S.db.collection('members').doc(S.sealId).update({hash:h})}catch(x){er.textContent='Enregistrement impossible.';return}
+  showSeal(false);$('err').style.color='var(--ok)';$('err').textContent='Sceau créé ! Connecte-toi avec ton mot de passe.'});
 const fd=f=>Object.fromEntries(new FormData(f).entries());
-$('fm').addEventListener('submit',e=>{e.preventDefault();if(!canManage())return;const d=fd(e.target);
+$('fm').addEventListener('submit',e=>{e.preventDefault();if(!canManage())return;const d=fd(e.target),er=$('merr');
   if(!assignable().includes(d.grade))return;
-  S.db.collection('members').add({prenom:d.prenom.trim(),nom:d.name.trim(),grade:d.grade,key:genKey(),created:Date.now()});e.target.reset()});
+  if(S.members.some(x=>norm(x.prenom)===norm(d.prenom)&&norm(x.nom||x.name)===norm(d.name))){er.textContent='Cette personne est déjà dans la liste.';return}
+  er.textContent='';S.db.collection('members').add({prenom:d.prenom.trim(),nom:d.name.trim(),grade:d.grade,created:Date.now()});e.target.reset()});
 $('fp').addEventListener('submit',e=>{e.preventDefault();if(S.me.prenom&&!isG())return;const d=fd(e.target);
   S.db.collection('members').doc(S.me.id).update({prenom:d.prenom.trim(),nom:d.nom.trim()})});
 function hint(){const d=fd($('ft'));const a=Math.floor(Math.abs(Number(d.amount)))||0,c=Math.floor(a/10);

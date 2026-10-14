@@ -3,6 +3,12 @@
 Site de gestion pour un RP Naruto : membres et grades, trésorerie, jugements et tâches.
 Tout tient dans un seul fichier : `index.html` (HTML, CSS et JavaScript).
 
+## Accès
+- Le gérant se connecte avec son mot de passe de base (modifiable depuis l'onglet Profil).
+- Pour ajouter quelqu'un : onglet Membres > prénom, nom, grade > « Ajouter à la whitelist ».
+- La personne clique sur « Créer mon sceau » sur la page de connexion, saisit son prénom et son nom,
+  puis choisit son mot de passe si son nom est dans la whitelist.
+
 ## Lancer en local
 Ouvre le dossier dans VS Code, puis clic droit sur `index.html` > « Open with Live Server ».
 
